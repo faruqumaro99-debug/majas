@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Petualangan Detektif Majas Metafora - Kelas 5 SD</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Comic Neue -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4;
+            touch-action: manipulation;
+        }
+        .font-comic {
+            font-family: 'Comic Neue', cursive;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        .btn-bounce {
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+        .btn-bounce:active {
+            transform: scale(0.95);
+        }
+        .touch-target {
+            min-height: 48px;
+        }
+        .badge-locked {
+            filter: grayscale(1);
+            opacity: 0.4;
+        }
+        .matched-btn {
+            background-color: #10b981 !important;
+            color: white !important;
+            border-color: #059669 !important;
+            pointer-events: none;
+        }
+        .selected-btn {
+            border-color: #f59e0b !important;
+            background-color: #fef3c7 !important;
+            transform: scale(1.02);
+        }
+        .level-locked {
+            filter: grayscale(0.8);
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-amber-200">
+
+    <!-- Navigation Header -->
+    <header class="bg-emerald-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-3 py-2.5 flex justify-between items-center gap-2">
+            <div class="flex items-center gap-2.5 cursor-pointer" onclick="showScreen('welcome')">
+                <div class="w-10 h-10 bg-yellow-400 rounded-2xl flex items-center justify-center text-emerald-950 text-xl font-bold shadow-md">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-extrabold tracking-wide font-comic leading-none">DETEKTIF MAJAS</h1>
+                    <p class="text-[11px] text-emerald-100 mt-0.5">Bahasa Indonesia • Kelas 5 SD • <span class="text-yellow-300 font-bold">Oleh: Faruq Umaro</span></p>
+                </div>
+            </div>
+
+            <!-- Action Buttons for Mobile/Desktop -->
+            <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                <button onclick="showScreen('materi')" class="bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 border border-emerald-500 touch-target">
+                    <i class="fa-solid fa-book-open text-yellow-300"></i> <span class="hidden sm:inline">Materi</span>
+                </button>
+                <button onclick="showScreen('levels')" class="bg-yellow-400 hover:bg-yellow-300 text-emerald-950 px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow touch-target">
+                    <i class="fa-solid fa-gamepad"></i> <span>Main</span>
+                </button>
+                <button onclick="showScreen('dashboard')" class="bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow touch-target">
+                    <i class="fa-solid fa-trophy text-yellow-200"></i> <span class="hidden sm:inline">Skor</span>
+                </button>
+                <button onclick="openAdminModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 border border-slate-700 touch-target" title="Panel Admin">
+                    <i class="fa-solid fa-user-gear text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-3 sm:px-4 py-4 flex-grow w-full">
+
+        <!-- ================= SCREEN 1: WELCOME & DASHBOARD MATERI ================= -->
+        <div id="screen-welcome" class="space-y-6">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-br from-emerald-500 via-teal-600 to-emerald-800 rounded-3xl p-5 md:p-8 text-white card-shadow relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="bg-emerald-900/60 text-yellow-300 text-[11px] px-3 py-1 rounded-full font-extrabold tracking-wider uppercase border border-emerald-400/30 inline-block mb-2">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Modul Interaktif Kelas 5 SD
+                    </span>
+                    <h2 class="text-2xl md:text-4xl font-extrabold font-comic leading-tight">Petualangan Detektif Majas Metafora</h2>
+                    <p class="mt-2 text-emerald-100 text-xs md:text-sm leading-relaxed">
+                        Selesaikan 6 level tantangan kata kiasan bertingkat (LOTS hingga HOTS). <strong>Aturan Detektif:</strong> Kamu harus menjawab 100% BENAR pada tiap level untuk membuka level selanjutnya!
+                    </p>
+                    <div class="mt-3 text-xs text-yellow-200 font-semibold bg-emerald-900/40 inline-flex items-center px-3 py-1.5 rounded-xl border border-emerald-400/30">
+                        <i class="fa-solid fa-code-circle mr-1.5 text-yellow-300"></i> Pengembang & Penyusun Game: <span class="text-white font-extrabold ml-1">Faruq Umaro</span>
+                    </div>
+                    <div class="mt-5 flex flex-wrap gap-2.5">
+                        <button onclick="showScreen('materi')" class="bg-white text-emerald-800 font-bold px-5 py-2.5 rounded-2xl shadow-md hover:bg-emerald-50 transition text-xs sm:text-sm btn-bounce flex items-center gap-2 touch-target">
+                            <i class="fa-solid fa-book-open text-emerald-600"></i> Pelajari Materi Majas
+                        </button>
+                        <button onclick="showScreen('levels')" class="bg-yellow-400 text-emerald-950 font-extrabold px-5 py-2.5 rounded-2xl shadow-lg hover:bg-yellow-300 transition text-xs sm:text-sm btn-bounce flex items-center gap-2 touch-target">
+                            <i class="fa-solid fa-play"></i> Pilih Level Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Ringkasan Materi Quick Access (3 Points) -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-extrabold text-slate-800 font-comic flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark text-emerald-600"></i> Ringkasan Materi Majas (Kelas 5 SD)
+                </h3>
+
+                <!-- Point 1, 2, 3 Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                    <!-- Point 1 -->
+                    <div onclick="showScreen('materi'); switchMateriTab(1);" class="bg-white p-4 rounded-2xl border border-emerald-100 card-shadow hover:border-emerald-400 transition cursor-pointer btn-bounce">
+                        <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl mb-2 font-bold">
+                            1
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-800">Point 1: Apa Itu Majas & Macamnya?</h4>
+                        <p class="text-xs text-slate-500 mt-1">Pengertian gaya bahasa kiasan dan 3 jenis utamanya: Personifikasi, Hiperbola, & Metafora.</p>
+                    </div>
+
+                    <!-- Point 2 -->
+                    <div onclick="showScreen('materi'); switchMateriTab(2);" class="bg-white p-4 rounded-2xl border border-teal-100 card-shadow hover:border-teal-400 transition cursor-pointer btn-bounce">
+                        <div class="w-10 h-10 bg-teal-100 text-teal-700 rounded-xl flex items-center justify-center text-xl mb-2 font-bold">
+                            2
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-800">Point 2: Detail & Contoh Masing-Masing</h4>
+                        <p class="text-xs text-slate-500 mt-1">Penjelasan ciri khas dan contoh kalimat untuk Personifikasi, Hiperbola, dan Metafora.</p>
+                    </div>
+
+                    <!-- Point 3 -->
+                    <div onclick="showScreen('materi'); switchMateriTab(3);" class="bg-white p-4 rounded-2xl border border-amber-200 bg-amber-50/30 card-shadow hover:border-amber-400 transition cursor-pointer btn-bounce">
+                        <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-xl mb-2 font-bold">
+                            3
+                        </div>
+                        <h4 class="font-bold text-sm text-amber-900">Point 3: Fokus Majas Metafora</h4>
+                        <p class="text-xs text-slate-600 mt-1">Memahami kata/ungkapan kiasan langsung tanpa kata hubung + Kamus 50 Metafora lengkap.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 2: MATERI PEMBELAJARAN LENGKAP ================= -->
+        <div id="screen-materi" class="hidden space-y-5">
+            <!-- Navigation Tabs -->
+            <div class="bg-white rounded-2xl p-2 card-shadow border border-emerald-100 flex flex-wrap gap-1.5">
+                <button id="mtab-1" onclick="switchMateriTab(1)" class="flex-1 py-2 px-3 rounded-xl font-bold text-xs text-center transition bg-emerald-600 text-white shadow">
+                    Point 1: Arti & Macam
+                </button>
+                <button id="mtab-2" onclick="switchMateriTab(2)" class="flex-1 py-2 px-3 rounded-xl font-bold text-xs text-center transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    Point 2: Detail & Contoh
+                </button>
+                <button id="mtab-3" onclick="switchMateriTab(3)" class="flex-1 py-2 px-3 rounded-xl font-bold text-xs text-center transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    Point 3: Fokus Metafora
+                </button>
+            </div>
+
+            <!-- Tab 1: Pengertian & Macam -->
+            <div id="msec-1" class="bg-white p-5 rounded-2xl border border-emerald-100 card-shadow space-y-3">
+                <div class="flex items-center gap-2 text-emerald-700 font-extrabold text-lg font-comic">
+                    <i class="fa-solid fa-book text-emerald-600"></i> Point 1: Pengertian & Macam-Macam Majas
+                </div>
+                <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                    <strong>Majas</strong> adalah gaya bahasa kiasan atau indah yang digunakan penulis atau pembicara untuk menyampaikan pesan agar kalimat terasa lebih hidup, menarik, dan berkesan.
+                </p>
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3.5 rounded-r-xl">
+                    <h5 class="font-bold text-xs text-emerald-900 uppercase">3 Jenis Majas Utama di Kelas 5 SD:</h5>
+                    <ul class="list-disc list-inside text-xs text-emerald-800 mt-1.5 space-y-1">
+                        <li><strong>Majas Personifikasi:</strong> Mengumpamakan benda mati seolah berilaku seperti manusia.</li>
+                        <li><strong>Majas Hiperbola:</strong> Menggunakan ungkapan yang sangat berlebihan atau membesar-besarkan fakta.</li>
+                        <li><strong>Majas Metafora:</strong> Membandingkan dua hal secara langsung menggunakan ungkapan kiasan.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab 2: Detail & Contoh -->
+            <div id="msec-2" class="hidden space-y-3">
+                <!-- Personifikasi Card -->
+                <div class="bg-white p-4 rounded-2xl border border-emerald-100 card-shadow space-y-2">
+                    <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">1. Majas Personifikasi</span>
+                    <h4 class="font-extrabold text-sm text-slate-800">Benda Mati Berperilaku Seperti Manusia</h4>
+                    <p class="text-xs text-slate-600">Memberikan sifat-sifat manusia (menari, bernyanyi, memanggil, melambai) kepada benda mati.</p>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><i class="fa-solid fa-quote-left text-blue-500 mr-1"></i> Contoh 1: <em>"Pena milik sang penulis <strong>menari-nari indah</strong> di atas kertas."</em></div>
+                        <div><i class="fa-solid fa-quote-left text-blue-500 mr-1"></i> Contoh 2: <em>"Angin malam <strong>berbisik lembut</strong> menyapa wajahku."</em></div>
+                    </div>
+                </div>
+
+                <!-- Hiperbola Card -->
+                <div class="bg-white p-4 rounded-2xl border border-emerald-100 card-shadow space-y-2">
+                    <span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">2. Majas Hiperbola</span>
+                    <h4 class="font-extrabold text-sm text-slate-800">Ungkapan Berlebihan yang Membesar-besarkan</h4>
+                    <p class="text-xs text-slate-600">Menggunakan kata-kata yang dilebih-lebihkan untuk memberi kesan sangat dramatis.</p>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><i class="fa-solid fa-quote-left text-purple-500 mr-1"></i> Contoh 1: <em>"Suara petir di malam hari <strong>menggelegar membelah angkasa</strong>."</em></div>
+                        <div><i class="fa-solid fa-quote-left text-purple-500 mr-1"></i> Contoh 2: <em>"Air mata kesedihannya <strong>mengalir menganak sungai</strong>."</em></div>
+                    </div>
+                </div>
+
+                <!-- Metafora Card -->
+                <div class="bg-white p-4 rounded-2xl border border-amber-200 bg-amber-50/20 card-shadow space-y-2">
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">3. Majas Metafora</span>
+                    <h4 class="font-extrabold text-sm text-slate-800">Perbandingan Langsung Ungkapan Kiasan</h4>
+                    <p class="text-xs text-slate-600">Menggantikan kata asli dengan kata kiasan lain yang memiliki sifat yang mirip secara langsung.</p>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><i class="fa-solid fa-quote-left text-amber-500 mr-1"></i> Contoh 1: <em>"Paman membawakan <strong>buah tangan</strong> dari kota."</em> (Buah tangan = Oleh-oleh).</div>
+                        <div><i class="fa-solid fa-quote-left text-amber-500 mr-1"></i> Contoh 2: <em>"Rudi menjadi <strong>bintang kelas</strong> semester ini."</em> (Bintang kelas = Murid berprestasi).</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Fokus Majas Metafora & Kamus -->
+            <div id="msec-3" class="hidden space-y-4">
+                <div class="bg-gradient-to-r from-amber-500 to-yellow-500 text-white p-5 rounded-2xl card-shadow">
+                    <h4 class="text-lg font-extrabold font-comic">Point 3: Fokus Spesial Majas Metafora</h4>
+                    <p class="text-xs mt-1 leading-relaxed">
+                        Majas Metafora **TIDAK menggunakan kata pembanding** seperti <em>"seperti"</em>, <em>"bagaikan"</em>, atau <em>"bak"</em>. Metafora langsung menyandingkan objek dengan ungkapan kiasan!
+                    </p>
+                </div>
+
+                <!-- Kamus Metafora Search -->
+                <div class="bg-white p-4 rounded-2xl border border-emerald-100 card-shadow space-y-3">
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <h4 class="font-bold text-sm text-slate-800 font-comic flex items-center gap-1.5">
+                            <i class="fa-solid fa-book-bookmark text-amber-500"></i> Kamus Ungkapan Metafora (50 Kata Lengkap)
+                        </h4>
+                        <input type="text" id="kamus-search" oninput="filterKamus()" placeholder="Cari ungkapan metafora..." class="px-3 py-1.5 rounded-xl text-xs border border-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-48">
+                    </div>
+
+                    <div id="kamus-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-80 overflow-y-auto pr-1">
+                        <!-- Dynamic via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pt-2">
+                <button onclick="showScreen('levels')" class="bg-yellow-400 hover:bg-yellow-300 text-emerald-950 font-extrabold px-6 py-3 rounded-2xl shadow-lg transition btn-bounce inline-flex items-center gap-2 text-sm touch-target">
+                    <i class="fa-solid fa-gamepad"></i> Mulai Bermain Game Level 1-6
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 3: LEVEL SELECTION HUB ================= -->
+        <div id="screen-levels" class="hidden space-y-5">
+            <div class="text-center max-w-md mx-auto space-y-1">
+                <h2 class="text-2xl font-extrabold text-slate-800 font-comic">Pilih Level Permainan</h2>
+                <p class="text-xs text-slate-500">
+                    <i class="fa-solid fa-circle-exclamation text-amber-500 mr-1"></i>
+                    <strong>Syarat Syarat Lulus:</strong> Kamu HARUS menjawab <strong>100% BENAR (5/5 Soal)</strong> untuk membuka level berikutnya!
+                </p>
+            </div>
+
+            <div id="levels-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                <!-- Level cards rendered dynamically via JS -->
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 4: GAMEPLAY ENGINE ================= -->
+        <div id="screen-game" class="hidden space-y-4">
+            <!-- Progress Bar Header -->
+            <div class="bg-white rounded-2xl p-3.5 card-shadow border border-emerald-100 flex justify-between items-center gap-3">
+                <button onclick="confirmExitLevel()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Level
+                </button>
+                <div class="flex-1 max-w-xs">
+                    <div class="flex justify-between text-[11px] font-bold text-slate-500 mb-1">
+                        <span id="game-level-indicator">Level 1</span>
+                        <span id="game-progress-indicator">Soal 1 / 5</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
+                        <div id="game-progress-bar" class="bg-emerald-500 h-full w-1/5 transition-all duration-300"></div>
+                    </div>
+                </div>
+                <div class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-xl text-xs font-bold">
+                    <i class="fa-solid fa-star text-amber-500"></i> Skor: <span id="live-score">0</span>
+                </div>
+            </div>
+
+            <!-- Question Box Container -->
+            <div class="bg-white rounded-3xl p-5 md:p-7 card-shadow border border-emerald-100 min-h-[320px] flex flex-col justify-between relative">
+                <div>
+                    <!-- Context Narrative Story Box if HOTS -->
+                    <div id="story-context-box" class="hidden bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mb-4 text-xs md:text-sm text-slate-700 leading-relaxed font-serif italic">
+                        <!-- Story goes here -->
+                    </div>
+
+                    <!-- Main Prompt -->
+                    <div id="game-question-text" class="text-base md:text-lg font-bold text-slate-800 leading-snug">
+                        Loading Pertanyaan...
+                    </div>
+                </div>
+
+                <!-- Multiple Choice Container (For Levels 1, 3, 5, 6) -->
+                <div id="game-options-container" class="grid grid-cols-1 gap-2.5 mt-5">
+                    <!-- Dynamic Buttons -->
+                </div>
+
+                <!-- Match / Drag-Tap Container (For Levels 2, 4) -->
+                <div id="game-match-container" class="hidden space-y-3 mt-5">
+                    <p class="text-xs font-semibold text-amber-800 bg-amber-50 p-2.5 rounded-xl border border-amber-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hand-pointer text-amber-500"></i> Tap satu item di kolom kiri, lalu tap pasangannya di kolom kanan!
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div id="match-col-left" class="space-y-2"></div>
+                        <div id="match-col-right" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Feedback Popup Banner -->
+                <div id="game-feedback-box" class="hidden mt-4 p-3.5 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-between transition-all">
+                    <span id="game-feedback-text"></span>
+                    <button id="btn-next-q" onclick="nextQuestion()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs hover:bg-slate-700 transition flex items-center gap-1">
+                        Lanjut <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 5: DASHBOARD SKOR & LENCANA ================= -->
+        <div id="screen-dashboard" class="hidden space-y-6">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 rounded-3xl p-5 md:p-7 text-white card-shadow flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <span class="bg-amber-900/50 text-yellow-200 text-[10px] px-3 py-1 rounded-full font-extrabold uppercase border border-amber-300/30">
+                        <i class="fa-solid fa-award mr-1"></i> Dashboard Prestasi
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold font-comic mt-1">Papan Nilai & Lencana Kehormatan</h2>
+                    <p class="text-xs text-amber-100 mt-0.5">Catat rekor terbaikmu dan kumpulkan seluruh 6 lencana detektif!</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center min-w-[160px]">
+                    <span class="text-[10px] font-bold text-yellow-200 uppercase tracking-wider block">Total Skor Kamu</span>
+                    <div id="total-user-score" class="text-3xl font-black text-yellow-300 my-0.5">0</div>
+                    <span class="text-[10px] text-amber-100"><i class="fa-solid fa-crown text-yellow-300 mr-1"></i>Rekor Tertinggi</span>
+                </div>
+            </div>
+
+            <!-- Badges Collection Grid -->
+            <div class="bg-white p-5 rounded-2xl border border-emerald-100 card-shadow space-y-3">
+                <h3 class="font-extrabold text-sm text-slate-800 font-comic flex items-center gap-2">
+                    <i class="fa-solid fa-medal text-amber-500"></i> Koleksi Lencana Kehormatan Detektif
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <!-- Badge 1 -->
+                    <div id="badge-1" class="badge-locked bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center space-y-1 transition">
+                        <div class="text-3xl">🏅</div>
+                        <h4 class="font-bold text-xs text-slate-800">Detektif Muda</h4>
+                        <p class="text-[9px] text-slate-400">Lulus Level 1 (100%)</p>
+                    </div>
+
+                    <!-- Badge 2 -->
+                    <div id="badge-2" class="badge-locked bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center space-y-1 transition">
+                        <div class="text-3xl">🔍</div>
+                        <h4 class="font-bold text-xs text-slate-800">Penyelidik</h4>
+                        <p class="text-[9px] text-slate-400">Lulus Level 2 (100%)</p>
+                    </div>
+
+                    <!-- Badge 3 -->
+                    <div id="badge-3" class="badge-locked bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center space-y-1 transition">
+                        <div class="text-3xl">📜</div>
+                        <h4 class="font-bold text-xs text-slate-800">Ahli Metafora</h4>
+                        <p class="text-[9px] text-slate-400">Lulus Level 3 (100%)</p>
+                    </div>
+
+                    <!-- Badge 4 -->
+                    <div id="badge-4" class="badge-locked bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center space-y-1 transition">
+                        <div class="text-3xl">🧠</div>
+                        <h4 class="font-bold text-xs text-slate-800">Pakar Bahasa</h4>
+                        <p class="text-[9px] text-slate-400">Lulus Level 4 (100%)</p>
+                    </div>
+
+                    <!-- Badge 5 -->
+                    <div id="badge-5" class="badge-locked bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center space-y-1 transition">
+                        <div class="text-3xl">🏆</div>
+                        <h4 class="font-bold text-xs text-slate-800">Master Majas</h4>
+                        <p class="text-[9px] text-slate-400">Lulus Level 5 (100%)</p>
+                    </div>
+
+                    <!-- Badge 6 -->
+                    <div id="badge-6" class="badge-locked bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center space-y-1 transition">
+                        <div class="text-3xl">👑</div>
+                        <h4 class="font-bold text-xs text-slate-800">Mpu Pujangga</h4>
+                        <p class="text-[9px] text-slate-400">Lulus Level 6 (100%)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Score & Leaderboard Table -->
+            <div class="bg-white p-5 rounded-2xl border border-emerald-100 card-shadow space-y-4">
+                <!-- Save Score Form -->
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 space-y-2">
+                    <h4 class="font-bold text-xs text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk text-emerald-600"></i> Simpan Rekor Nilai & Integrasi Spreadsheet
+                    </h4>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="player-name-input" placeholder="Masukkan Nama Lengkap / Kelas..." class="flex-1 px-3.5 py-2 rounded-xl text-xs border border-emerald-300 focus:outline-none focus:border-emerald-600">
+                        <button onclick="savePlayerScore()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 touch-target">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Skor
+                        </button>
+                    </div>
+                    <p id="save-status-msg" class="text-[11px] font-semibold hidden"></p>
+                </div>
+
+                <!-- Leaderboard Table -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-extrabold text-sm text-slate-800 font-comic flex items-center gap-1.5">
+                            <i class="fa-solid fa-ranking-star text-amber-500"></i> Top Rekor Detektif
+                        </h4>
+                        <button onclick="renderLeaderboard()" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 rounded-lg font-bold">
+                            <i class="fa-solid fa-rotate-right"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                                    <th class="py-2.5 px-3 font-bold text-center w-12">#</th>
+                                    <th class="py-2.5 px-3 font-bold">Nama Detektif</th>
+                                    <th class="py-2.5 px-3 font-bold text-center">Nilai</th>
+                                    <th class="py-2.5 px-3 font-bold text-right">Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-tbody" class="divide-y divide-slate-100">
+                                <!-- Dynamic JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ADMIN PANEL MODAL ================= -->
+        <div id="admin-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 overflow-y-auto">
+            <div class="bg-white rounded-3xl max-w-2xl w-full p-5 md:p-7 card-shadow relative my-6">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center pb-3 border-b border-slate-200">
+                    <div>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+                            <i class="fa-solid fa-user-shield mr-1"></i> Admin Panel
+                        </span>
+                        <h3 class="text-xl font-extrabold text-slate-800 font-comic mt-0.5">Pengaturan Admin & Webhook</h3>
+                        <p class="text-[11px] text-slate-500">Pengembang Game: Faruq Umaro</p>
+                    </div>
+                    <button onclick="closeAdminModal()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Admin Security Login (Username: majas , Password: detective) -->
+                <div id="admin-auth-box" class="py-6 text-center space-y-3">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mx-auto">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-slate-800">Login Administrator Game</h4>
+                    <div class="max-w-xs mx-auto space-y-2">
+                        <input type="text" id="admin-user-input" placeholder="Username..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-amber-500">
+                        <input type="password" id="admin-pass-input" placeholder="Password..." class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-amber-500">
+                        <button onclick="verifyAdminLogin()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 rounded-xl text-xs transition">
+                            Masuk Panel Admin
+                        </button>
+                    </div>
+                    <p id="admin-auth-error" class="text-xs text-rose-600 font-semibold hidden">Username atau Password salah!</p>
+                </div>
+
+                <!-- Admin Main Content -->
+                <div id="admin-content-box" class="hidden mt-4 space-y-4">
+                    <!-- Google Sheets Integration Setup -->
+                    <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200 space-y-2">
+                        <h5 class="font-extrabold text-xs text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-table-cells text-emerald-600"></i> Integrasi Google Sheets Webhook
+                        </h5>
+                        <p class="text-[11px] text-slate-600">Masukkan URL Web App dari Google Apps Script untuk merekap nilai siswa ke Google Spreadsheet secara otomatis:</p>
+                        <div class="flex gap-2">
+                            <input type="text" id="gsheet-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 px-3 py-1.5 rounded-xl text-xs border border-emerald-300">
+                            <button onclick="saveGSheetUrl()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold">Simpan URL</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs space-y-2">
+                        <h5 class="font-bold text-slate-800">Reset Level Terbuka</h5>
+                        <p class="text-[11px] text-slate-500">Setel ulang progres level terbuka ke Level 1 untuk keperluan pengujian kelas.</p>
+                        <button onclick="resetLevelProgress()" class="bg-rose-600 text-white px-3 py-1.5 rounded-xl font-bold text-xs">Reset Progres Level</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVALUATION MODAL (PASSED 100% / FAILED) -->
+        <div id="eval-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 card-shadow">
+                <div id="eval-icon" class="text-5xl">🏆</div>
+                <h3 id="eval-title" class="text-xl font-extrabold font-comic text-slate-800">Level Selesai!</h3>
+                <p id="eval-msg" class="text-xs text-slate-600 leading-relaxed"></p>
+                <div id="eval-btns" class="flex flex-col gap-2 pt-2">
+                    <!-- Dynamic buttons -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Credit -->
+    <footer class="bg-emerald-900 text-emerald-100 py-3.5 px-4 text-center text-xs mt-6 border-t border-emerald-800">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                <span class="font-bold text-white font-comic">Detektif Majas Metafora</span> &copy; Modul Kelas 5 SD
+            </div>
+            <div class="text-yellow-300 font-semibold">
+                <i class="fa-solid fa-heart text-rose-400 mr-1"></i> Dibuat Oleh: <span class="font-bold text-white underline">Faruq Umaro</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 50 Kamus Metafora Dataset
+        const kamusMetaforaData = [
+            { word: "Buah tangan", meaning: "Oleh-oleh dari perjalanan", example: "Ibu membawa buah tangan dari Bandung." },
+            { word: "Buah hati", meaning: "Anak kandung / kesayangan", example: "Budi adalah buah hati Pak Ahmad." },
+            { word: "Bintang kelas", meaning: "Siswa paling pintar/berprestasi", example: "Dina menjadi bintang kelas semester ini." },
+            { word: "Kutu buku", meaning: "Orang yang sangat gemar membaca", example: "Siti dijuluki kutu buku perpustakaan." },
+            { word: "Anak emas", meaning: "Anak kesayangan yang diistimewakan", example: "Rudi menjadi anak emas di klub sepak bola." },
+            { word: "Panjang tangan", meaning: "Suka mencuri barang orang lain", example: "Anak panjang tangan itu ditangkap." },
+            { word: "Kepala dingin", meaning: "Tenang dan tidak mudah emosi", example: "Selesaikan masalah dengan kepala dingin." },
+            { word: "Lapang dada", meaning: "Sabar, ikhlas, dan menerima", example: "Ia menerima kekalahan dengan lapang dada." },
+            { word: "Tangan kanan", meaning: "Orang kepercayaan utama", example: "Pak Doni adalah tangan kanan direktur." },
+            { word: "Unjuk gigi", meaning: "Menunjukkan kemampuan / keahlian", example: "Pemain muda itu mulai unjuk gigi." },
+            { word: "Gulung tikar", meaning: "Bangkrut / mengalami kerugian besar", example: "Toko kain itu terpaksa gulung tikar." },
+            { word: "Rendah hati", meaning: "Tidak sombong / ramah", example: "Meskipun juara, ia tetap rendah hati." },
+            { word: "Tinggi hati", meaning: "Sombong / angkuh", example: "Jangan menjadi anak yang tinggi hati." },
+            { word: "Berat hati", meaning: "Kurang ikhlas / merasa ganjal", example: "Ibu berat hati melepas kakak pergi." },
+            { word: "Murah hati", meaning: "Suka memberi / dermawan", example: "Orang kaya yang murah hati itu sering berbagi." },
+            { word: "Otak encer", meaning: "Cerdas / cepat memahami pelajaran", example: "Rian berotak encer dalam matematika." },
+            { word: "Banting tulang", meaning: "Bekerja keras mati-matian", example: "Ayah banting tulang demi keluarga." },
+            { word: "Buah bibir", meaning: "Bahan pembicaraan banyak orang", example: "Prestasi Dina menjadi buah bibir warga." },
+            { word: "Kambing hitam", meaning: "Orang yang disalahkan atas kesalahan", example: "Doni dijadikan kambing hitam." },
+            { word: "Naik daun", meaning: "Sedang terkenal / populer", example: "Penyanyi cilik itu sedang naik daun." },
+            { word: "Gigit jari", meaning: "Kecewa / tidak mendapat apa-apa", example: "Penonton gigit jari karena tiket habis." },
+            { word: "Meja hijau", meaning: "Pengadilan resmi", example: "Kasus sengketa dibawa ke meja hijau." },
+            { word: "Tutup usia", meaning: "Meninggal dunia", example: "Tokoh masyarakat itu telah tutup usia." },
+            { word: "Tulang punggung", meaning: "Pencari nafkah utama keluarga", example: "Kakak menjadi tulang punggung keluarga." },
+            { word: "Darah biru", meaning: "Keturunan bangsawan", example: "Pangeran itu berasal dari darah biru." },
+            { word: "Besar kepala", meaning: "Sombong karena sering dipuji", example: "Jangan besar kepala setelah menang." },
+            { word: "Ringan tangan", meaning: "Suka menolong / rajin membantu", example: "Anak yang ringan tangan disukai kawan." },
+            { word: "Cuci tangan", meaning: "Tidak mau bertanggung jawab", example: "Ia cuci tangan saat kelompok gagal." },
+            { word: "Bunga desa", meaning: "Gadis paling cantik di desa", example: "Gadis itu menjadi bunga desa." },
+            { word: "Sepak terjang", meaning: "Rekam jejak perjuangan / perilaku", example: "Sepak terjang pahlawan dipuji." },
+            { word: "Jiwa besar", meaning: "Sportif dan lapang dada", example: "Ia berjiwa besar saat kalah." },
+            { word: "Makan garam", meaning: "Banyak pengalaman hidup", example: "Kakek sudah banyak makan garam." },
+            { word: "Adu mulut", meaning: "Bertengkar / berdebat keras", example: "Dua pedagang itu adu mulut." },
+            { word: "Diam seribu bahasa", meaning: "Tidak berkata sama sekali", example: "Ia diam seribu bahasa saat ditanya." },
+            { word: "Gelap mata", meaning: "Hilang akal karena marah", example: "Ia gelap mata hingga merusak barang." },
+            { word: "Cepat kaki ringan tangan", meaning: "Tangkas dan suka membantu", example: "Anak itu cepat kaki ringan tangan." },
+            { word: "Bintang lapangan", meaning: "Pemain terbaik di pertandingan", example: "Striker itu jadi bintang lapangan." },
+            { word: "Bermuka dua", meaning: "Tidak jujur / munafik", example: "Jangan percaya orang bermuka dua." },
+            { word: "Muka tebal", meaning: "Tidak punya rasa malu", example: "Orang tebal muka itu tidak malu meminta." },
+            { word: "Tangan besi", meaning: "Kekuasaan yang keras / otoriter", example: "Raja memimpin dengan tangan besi." },
+            { word: "Naik pitam", meaning: "Sangat marah / emosi meluap", example: "Ayah naik pitam saat barangnya rusak." },
+            { word: "Lurus hati", meaning: "Jujur / tulus dapat dipercaya", example: "Pemuda lurus hati selalu dipercaya." },
+            { word: "Angkat kaki", meaning: "Pergi / melarikan diri", example: "Pencuri angkat kaki saat ketahuan." },
+            { word: "Angkat tangan", meaning: "Menyerah / tidak sanggup", example: "Ia angkat tangan mengerjakan soal ini." },
+            { word: "Rendah diri", meaning: "Minder / tidak percaya diri", example: "Jangan rendah diri di depan umum." },
+            { word: "Keras kepala", meaning: "Susah dinasihati", example: "Anak keras kepala itu sulit diatur." },
+            { word: "Lintah darat", meaning: "Rentenir yang memeras", example: "Warga terjerat lintah darat." },
+            { word: "Kabar angin", meaning: "Berita yang belum tentu benar", example: "Jangan mudah percaya kabar angin." },
+            { word: "Mata-mata", meaning: "Orang yang mengamati rahasia", example: "Detektif mengirim mata-mata." },
+            { word: "Kunci jawaban", meaning: "Petunjuk penyelesaian masalah", example: "Gunakan panduan sebagai kunci." }
+        ];
+
+        // Question Dataset for Levels 1 to 6 (5 Questions Each = 30 Total)
+        const gameLevelsData = {
+            1: [ // Level 1: LOTS Multiple Choice
+                {
+                    q: "Manakah di bawah ini yang merupakan pengertian dari <strong>Majas Metafora</strong>?",
+                    options: [
+                        "Perbandingan langsung menggunakan ungkapan kiasan tanpa kata pembanding.",
+                        "Menggambarkan benda mati seolah-olah bernapas dan bergerak seperti manusia.",
+                        "Kalimat yang menggunakan ungkapan sangat berlebihan untuk menarik perhatian."
+                    ],
+                    ans: 0,
+                    exp: "Metafora membandingkan dua hal secara langsung dengan kata kiasan tanpa kata pembanding."
+                },
+                {
+                    q: "Kalimat: <em>'Pena sang penulis menari-nari di atas kertas.'</em> Termasuk jenis majas apa?",
+                    options: ["Metafora", "Personifikasi", "Hiperbola"],
+                    ans: 1,
+                    exp: "Pena (benda mati) digambarkan 'menari-nari' seperti manusia (Personifikasi)."
+                },
+                {
+                    q: "Kalimat: <em>'Suara petir itu menggelegar hingga membelah angkasa.'</em> Menggunakan majas apa?",
+                    options: ["Metafora", "Personifikasi", "Hiperbola"],
+                    ans: 2,
+                    exp: "Membelah angkasa adalah ungkapan yang sangat dilebih-lebihkan (Hiperbola)."
+                },
+                {
+                    q: "Kalimat: <em>'Ibu membawa buah tangan setelah pulang dari Jakarta.'</em> Ungkapan <strong>buah tangan</strong> termasuk majas?",
+                    options: ["Metafora", "Personifikasi", "Hiperbola"],
+                    ans: 0,
+                    exp: "Buah tangan adalah kiasan langsung untuk oleh-oleh (Metafora)."
+                },
+                {
+                    q: "Ciri khas utama dari majas Personifikasi adalah...",
+                    options: [
+                        "Menggunakan kata 'seperti' atau 'bagaikan'.",
+                        "Memberikan sifat atau perilaku manusia pada benda mati.",
+                        "Menggunakan ungkapan kiasan tanpa kata hubung."
+                    ],
+                    ans: 1,
+                    exp: "Personifikasi menghidupkan benda mati dengan sifat manusia."
+                }
+            ],
+            2: [ // Level 2: LOTS Interactive Matching (Tap Left -> Tap Right)
+                {
+                    type: "match",
+                    q: "Cocokkan 5 Ungkapan Metafora di sebelah kiri dengan Maknanya di sebelah kanan!",
+                    pairs: [
+                        { left: "Kutu buku", right: "Sangat gemar membaca" },
+                        { left: "Bintang kelas", right: "Siswa paling pintar" },
+                        { left: "Panjang tangan", right: "Suka mencuri barang" },
+                        { left: "Anak emas", right: "Anak kesayangan" },
+                        { left: "Kepala dingin", right: "Tenang tidak emosi" }
+                    ]
+                }
+            ],
+            3: [ // Level 3: MOTS Short Story Multiple Choice
+                {
+                    q: "Di sekolah, Dina selalu mendapat nilai sempurna dan rajin membantu teman. Guru menyebutnya sebagai <span class='text-amber-600 underline font-bold'>bintang kelas</span>. Apa arti ungkapan tersebut?",
+                    options: ["Siswa yang paling pintar dan berprestasi", "Siswa yang suka bernyanyi di kelas", "Bintang yang jatuh di dalam kelas"],
+                    ans: 0,
+                    exp: "Bintang kelas berarti murid yang paling berprestasi."
+                },
+                {
+                    q: "Pak Doni bekerja keras siang dan malam tanpa kenal lelah demi membiayai sekolah anaknya. Perilaku Pak Doni disebut...",
+                    options: ["Gulung tikar", "Banting tulang", "Tinggi hati"],
+                    ans: 1,
+                    exp: "Banting tulang artinya bekerja keras mati-matian."
+                },
+                {
+                    q: "Meskipun toko milik Kakak sempat sepi, kini usahanya mulai ramai dan dikenal banyak orang. Usaha Kakak sedang...",
+                    options: ["Naik daun", "Gigit jari", "Cuci tangan"],
+                    ans: 0,
+                    exp: "Naik daun artinya sedang populer atau sukses."
+                },
+                {
+                    q: "Saat hasil pertandingan diumumkan dan timnya kalah, Doni tersenyum dan mengucapkan selamat kepada pemenang. Doni memiliki sikap...",
+                    options: ["Besar kepala", "Jiwa besar", "Keras kepala"],
+                    ans: 1,
+                    exp: "Berjiwa besar artinya sportif dan lapang dada menerima kekalahan."
+                },
+                {
+                    q: "Siti sering membantu merapikan perpustakaan dan membaca puluhan buku setiap minggu. Teman-temannya menjulukinya...",
+                    options: ["Anak emas", "Kutu buku", "Panjang tangan"],
+                    ans: 1,
+                    exp: "Kutu buku adalah sebutan untuk orang yang suka membaca."
+                }
+            ],
+            4: [ // Level 4: MOTS Interactive Matching in Context
+                {
+                    type: "match",
+                    q: "Pasangkan Ungkapan Metafora pada Kalimat dengan Arti yang Tepat!",
+                    pairs: [
+                        { left: "Lapang dada saat kalah", right: "Ikhlas dan sabar" },
+                        { left: "Tangan kanan direktur", right: "Orang kepercayaan" },
+                        { left: "Toko gulung tikar", right: "Mengalami kebangkrutan" },
+                        { left: "Murah hati suka berbagi", right: "Dermawan" },
+                        { left: "Otak encer di pelajaran", right: "Sangat cerdas" }
+                    ]
+                }
+            ],
+            5: [ // Level 5: HOTS Narrative Analysis (Soal Cerita Detektif)
+                {
+                    story: "<strong>Kasus 1: Hilangnya Jam Tangan Sekolah</strong><br>Detektif Nala menyelidiki hilangnya jam tangan di kelas. Saksi melihat seorang murid yang dikenal <em>'panjang tangan'</em> mendekati meja. Namun sang murid menolak tuduhan dan berusaha <em>'cuci tangan'</em>.",
+                    q: "Berdasarkan cerita kasus di atas, apa arti dari ungkapan <strong>panjang tangan</strong> dan <strong>cuci tangan</strong>?",
+                    options: [
+                        "Panjang tangan = Suka mencuri ; Cuci tangan = Lepas tanggung jawab.",
+                        "Panjang tangan = Tangannya panjang ; Cuci tangan = Mencuci tangan dengan sabun.",
+                        "Panjang tangan = Rajin membantu ; Cuci tangan = Mengaku bersalah."
+                    ],
+                    ans: 0,
+                    exp: "Panjang tangan artinya suka mencuri, sedangkan cuci tangan artinya tidak mau bertanggung jawab."
+                },
+                {
+                    story: "<strong>Kasus 2: Sengketa Tanah Desa</strong><br>Dua warga desa berdebat keras hingga melakukan <em>'adu mulut'</em>. Kepala Desa mengimbau agar masalah diselesaikan dengan <em>'kepala dingin'</em> dan tidak dibawa ke <em>'meja hijau'</em>.",
+                    q: "Mengapa Kepala Desa meminta warga menyelesaikan masalah dengan <strong>kepala dingin</strong> sebelum ke <strong>meja hijau</strong>?",
+                    options: [
+                        "Agar warga tenang/tidak emosi sebelum membawa kasus ke pengadilan.",
+                        "Agar warga mengompres kepala dengan es di kantor polisi.",
+                        "Agar warga bertengkar lebih keras di pasar."
+                    ],
+                    ans: 0,
+                    exp: "Kepala dingin artinya tenang, meja hijau artinya pengadilan."
+                },
+                {
+                    story: "<strong>Kasus 3: Rahasia Pangeran Kerajaan</strong><br>Pangeran berasal dari keluarga <em>'darah biru'</em>. Meskipun calon penerima tahta, ia tidak pernah <em>'besar kepala'</em> dan selalu <em>'murah hati'</em> membantu rakyat miskin.",
+                    q: "Sifat manakah yang patut diteladani dari sang Pangeran?",
+                    options: [
+                        "Meskipun keturunan bangsawan, ia tidak sombong dan dermawan.",
+                        "Suka memamerkan kekayaannya kepada rakyat.",
+                        "Sombong karena memiliki darah berwarna biru."
+                    ],
+                    ans: 0,
+                    exp: "Darah biru = bangsawan, Besar kepala = sombong. Pangeran tidak sombong dan suka memberi."
+                },
+                {
+                    story: "<strong>Kasus 4: Kegagalan Tim Sepak Bola</strong><br>Tim Garuda terpaksa <em>'gigit jari'</em> setelah kalah di babak final. Pelatih mengingatkan pemain agar tidak saling menjadikan teman sebagai <em>'kambing hitam'</em>.",
+                    q: "Pesan moral apa yang disampaikan oleh pelatih?",
+                    options: [
+                        "Jangan menyalahkan orang lain atas kegagalan bersama.",
+                        "Semua pemain harus menggigit jari mereka.",
+                        "Pemain harus membeli kambing berwarna hitam."
+                    ],
+                    ans: 0,
+                    exp: "Kambing hitam artinya orang yang dipersalahkan secara tidak adil."
+                },
+                {
+                    story: "<strong>Kasus 5: Pahlawan Tanpa Tanda Jasa</strong><br>Pak Budi sudah puluhan tahun menjadi guru dan banyak <em>'makan garam'</em> kehidupan. Ia menjadi <em>'tulang punggung'</em> keluarga dan dihormati warga.",
+                    q: "Apa makna dari ungkapan <strong>makan garam</strong> dalam konteks cerita di atas?",
+                    options: [
+                        "Memiliki banyak pengalaman hidup dan pengetahuan.",
+                        "Suka mengonsumsi makanan yang asin.",
+                        "Bekerja di pabrik pembuat garam."
+                    ],
+                    ans: 0,
+                    exp: "Banyak makan garam berarti kaya akan pengalaman hidup."
+                }
+            ],
+            6: [ // Level 6: HOTS Master Detective Case
+                {
+                    story: "<strong>Misi Detektif 1: Misteri Penulis Misterius</strong><br>Detektif Nala menemukan puisi:<br><em>'Dewi Malam tersenyum ramah,<br>Sang bintang kelas tak pernah lelah,<br>Suara tangisnya membelah angkasa.'</em>",
+                    q: "Identifikasi urutan majas yang terdapat pada puisi di atas secara urut!",
+                    options: [
+                        "Personifikasi (Dewi malam tersenyum) ➔ Metafora (Bintang kelas) ➔ Hiperbola (Membelah angkasa)",
+                        "Metafora ➔ Personifikasi ➔ Hiperbola",
+                        "Hiperbola ➔ Metafora ➔ Personifikasi"
+                    ],
+                    ans: 0,
+                    exp: "Dewi malam tersenyum = Personifikasi; Bintang kelas = Metafora; Membelah angkasa = Hiperbola."
+                },
+                {
+                    story: "<strong>Misi Detektif 2: Kebijakan Pemimpin</strong><br>Raja memerintah dengan <em>'tangan besi'</em>, tetapi warganya tetap <em>'diam seribu bahasa'</em> karena takut.",
+                    q: "Bagaimanakah situasi kepemimpinan Raja tersebut?",
+                    options: [
+                        "Raja bersikap sangat keras/otoriter sehingga rakyat tidak berani bersuara.",
+                        "Raja memiliki tangan dari besi dan rakyat tidak bisa berbicara.",
+                        "Raja sangat ramah sehingga rakyat menangis haru."
+                    ],
+                    ans: 0,
+                    exp: "Tangan besi = otoriter/keras; Diam seribu bahasa = membisu/tidak berani bicara."
+                },
+                {
+                    story: "<strong>Misi Detektif 3: Pengorbanan Sang Ibu</strong><br>Ibu bekerja <em>'banting tulang'</em> demi <em>'buah hati'</em> kesayangannya tanpa pernah mengeluh.",
+                    q: "Sintesiskan makna gabungan dari kedua ungkapan metafora dalam kalimat cerita tersebut!",
+                    options: [
+                        "Ibu bekerja sangat keras demi kebahagiaan anak kandungnya.",
+                        "Ibu mematahkan tulang saat memakan buah berbentuk hati.",
+                        "Ibu marah-marah kepada anaknya."
+                    ],
+                    ans: 0,
+                    exp: "Banting tulang = kerja keras; Buah hati = anak."
+                },
+                {
+                    story: "<strong>Misi Detektif 4: Kebohongan Sahabat</strong><br>Doni tampak ramah di depan kawan-kawannya, tetapi di belakang ia suka membicarakan keburukan mereka. Doni adalah orang yang...",
+                    q: "Ungkapan metafora mana yang paling tepat menggambarkan sifat Doni?",
+                    options: ["Bermuka dua", "Rendah hati", "Otak encer"],
+                    ans: 0,
+                    exp: "Bermuka dua berarti tidak jujur atau munafik."
+                },
+                {
+                    story: "<strong>Misi Detektif 5: Ungkapan Paling Tepat</strong><br>Manakah kalimat berikut yang menggunakan majas **Metafora** dengan BENAR dan logis?",
+                    options: [
+                        "Siti dikenal sebagai kutu buku karena ia rajin membaca puluhan novel.",
+                        "Pohon kelapa itu melambai-lambai memanggil buah tangan.",
+                        "Suara adiknya menggelegar menari-nari di atas meja hijau."
+                    ],
+                    ans: 0,
+                    exp: "Kutu buku digunakan tepat untuk menggambarkan kebiasaan membaca."
+                }
+            ]
+        };
+
+        let currentLevel = 1;
+        let currentQIndex = 0;
+        let userScore = 0;
+        let levelCorrectCount = 0; // Tracks correct answers in the active level
+        let unlockedLevel = parseInt(localStorage.getItem('detektif_unlocked_level') || '1');
+        let selectedMatchLeft = null;
+        let completedMatchesCount = 0;
+        let googleSheetUrl = localStorage.getItem('detektif_gsheet_url') || '';
+
+        // Initialize App
+        window.onload = function() {
+            renderKamusGrid(kamusMetaforaData);
+            renderLevelCards();
+            updateUserScoreDisplay();
+            renderLeaderboard();
+            checkBadgesState();
+        };
+
+        // Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+            if (screenId === 'levels') renderLevelCards();
+            if (screenId === 'dashboard') checkBadgesState();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Switch Materi Tab
+        function switchMateriTab(tabNum) {
+            [1, 2, 3].forEach(n => {
+                document.getElementById(`mtab-${n}`).className = "flex-1 py-2 px-3 rounded-xl font-bold text-xs text-center transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+                document.getElementById(`msec-${n}`).classList.add('hidden');
+            });
+            document.getElementById(`mtab-${tabNum}`).className = "flex-1 py-2 px-3 rounded-xl font-bold text-xs text-center transition bg-emerald-600 text-white shadow";
+            document.getElementById(`msec-${tabNum}`).classList.remove('hidden');
+        }
+
+        // Render Kamus Grid
+        function renderKamusGrid(data) {
+            const container = document.getElementById('kamus-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 p-2.5 rounded-xl border border-slate-200 space-y-0.5 text-xs";
+                card.innerHTML = `
+                    <div class="font-extrabold text-emerald-800">${item.word}</div>
+                    <div class="text-slate-700 font-semibold">${item.meaning}</div>
+                    <div class="text-[10px] text-slate-400 italic">"${item.example}"</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterKamus() {
+            const query = document.getElementById('kamus-search').value.toLowerCase();
+            const filtered = kamusMetaforaData.filter(i => i.word.toLowerCase().includes(query) || i.meaning.toLowerCase().includes(query));
+            renderKamusGrid(filtered);
+        }
+
+        // Render Level Hub Cards with Unlock Validation
+        function renderLevelCards() {
+            const container = document.getElementById('levels-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const levelMeta = [
+                { title: "Mengenal Jenis Majas", type: "LOTS", desc: "Pilihan Ganda: Membedakan Personifikasi, Hiperbola, & Metafora.", icon: "fa-circle-check", color: "emerald" },
+                { title: "Mencocokkan Metafora", type: "LOTS", desc: "Interactive Match: Tap ungkapan metafora & artinya secara tepat.", icon: "fa-puzzle-piece", color: "teal" },
+                { title: "Metafora Cerita Pendek", type: "MOTS", desc: "Pilihan Ganda: Menemukan makna metafora dalam konteks cerita.", icon: "fa-book-open-reader", color: "blue" },
+                { title: "Menjodohkan Kalimat", type: "MOTS", desc: "Matching Game: Pasangkan ungkapan metafora dalam kalimat.", icon: "fa-link", color: "indigo" },
+                { title: "Analisis Kasus Detektif", type: "HOTS", desc: "Soal Cerita Naratif: Menganalisis makna kiasan & pesan moral.", icon: "fa-brain", color: "amber" },
+                { title: "Master Detective Case", type: "HOTS Super", desc: "Teka-Teki Detektif Kompleks: Pemecahan masalah kiasan tinggi.", icon: "fa-crown", color: "purple" }
+            ];
+
+            for (let i = 1; i <= 6; i++) {
+                const meta = levelMeta[i - 1];
+                const isUnlocked = i <= unlockedLevel;
+
+                const card = document.createElement('div');
+                card.className = `bg-white p-4 rounded-2xl border-2 ${isUnlocked ? 'border-emerald-400 hover:scale-[1.02] cursor-pointer' : 'border-slate-200 level-locked'} card-shadow transition relative overflow-hidden btn-bounce touch-target`;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="bg-${meta.color}-100 text-${meta.color}-800 text-[10px] font-extrabold px-2.5 py-1 rounded-lg uppercase">Level ${i} • ${meta.type}</span>
+                        <i class="fa-solid ${isUnlocked ? meta.icon + ' text-' + meta.color + '-500' : 'fa-lock text-slate-400'} text-lg"></i>
+                    </div>
+                    <h3 class="font-extrabold text-base text-slate-800 mt-2 font-comic">Level ${i}: ${meta.title}</h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">${meta.desc} (5 Soal)</p>
+                    ${!isUnlocked ? `<div class="mt-2 text-[10px] text-rose-600 font-bold bg-rose-50 p-1.5 rounded-lg border border-rose-200"><i class="fa-solid fa-lock mr-1"></i>Terkunci: Lulus Level ${i-1} dengan 100% BENAR dahulu</div>` : ''}
+                `;
+
+                if (isUnlocked) {
+                    card.onclick = () => startLevel(i);
+                } else {
+                    card.onclick = () => alert(`Level ${i} masih terkunci! Kamu harus menjawab 100% BENAR pada Level ${i-1} terlebih dahulu.`);
+                }
+                container.appendChild(card);
+            }
+        }
+
+        // Start Game Level
+        function startLevel(lvl) {
+            if (lvl > unlockedLevel) return;
+            currentLevel = lvl;
+            currentQIndex = 0;
+            levelCorrectCount = 0;
+            showScreen('game');
+            loadQuestion();
+        }
+
+        function confirmExitLevel() {
+            if (confirm("Keluar dari permainan? Progres level ini tidak akan disimpan.")) {
+                showScreen('levels');
+            }
+        }
+
+        // Load Question for Current Level & Index
+        function loadQuestion() {
+            const levelData = gameLevelsData[currentLevel];
+            const qData = levelData[currentQIndex];
+
+            // Header progress
+            document.getElementById('game-level-indicator').innerText = `Level ${currentLevel}`;
+            document.getElementById('game-progress-indicator').innerText = `Soal ${currentQIndex + 1} / ${levelData.length}`;
+            document.getElementById('game-progress-bar').style.width = `${((currentQIndex + 1) / levelData.length) * 100}%`;
+            document.getElementById('live-score').innerText = userScore;
+
+            // Reset boxes
+            document.getElementById('game-feedback-box').classList.add('hidden');
+            const storyBox = document.getElementById('story-context-box');
+            const optContainer = document.getElementById('game-options-container');
+            const matchContainer = document.getElementById('game-match-container');
+
+            if (qData.story) {
+                storyBox.classList.remove('hidden');
+                storyBox.innerHTML = qData.story;
+            } else {
+                storyBox.classList.add('hidden');
+            }
+
+            document.getElementById('game-question-text').innerHTML = qData.q;
+
+            // Interactive matching type (Level 2 & Level 4)
+            if (qData.type === "match") {
+                optContainer.classList.add('hidden');
+                matchContainer.classList.remove('hidden');
+                setupMatchGame(qData.pairs);
+            } else {
+                optContainer.classList.remove('hidden');
+                matchContainer.classList.add('hidden');
+                optContainer.innerHTML = '';
+
+                qData.options.forEach((optText, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 bg-slate-50/80 hover:bg-emerald-50 transition font-semibold text-xs md:text-sm text-slate-800 btn-bounce touch-target flex items-center justify-between";
+                    btn.innerHTML = `<span>${optText}</span> <i class="fa-regular fa-circle text-slate-400"></i>`;
+                    btn.onclick = () => checkMultipleChoice(idx, btn);
+                    optContainer.appendChild(btn);
+                });
+            }
+        }
+
+        // Check Multiple Choice
+        function checkMultipleChoice(selectedIdx, btnElement) {
+            const qData = gameLevelsData[currentLevel][currentQIndex];
+            const allBtns = document.querySelectorAll('#game-options-container button');
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+            const feedbackBox = document.getElementById('game-feedback-box');
+            const feedbackText = document.getElementById('game-feedback-text');
+
+            if (selectedIdx === qData.ans) {
+                userScore += 20;
+                levelCorrectCount++;
+                btnElement.className = "w-full text-left p-3.5 rounded-2xl border-2 border-emerald-500 bg-emerald-100 font-bold text-xs md:text-sm text-emerald-900 touch-target flex items-center justify-between";
+                btnElement.querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-lg";
+                feedbackBox.className = "mt-4 p-3.5 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-between bg-emerald-100 text-emerald-800 border border-emerald-300 block";
+                feedbackText.innerHTML = `<i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Tepat Sekali! +20 Poin. ${qData.exp}`;
+            } else {
+                btnElement.className = "w-full text-left p-3.5 rounded-2xl border-2 border-rose-500 bg-rose-100 font-bold text-xs md:text-sm text-rose-900 touch-target flex items-center justify-between";
+                btnElement.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-600 text-lg";
+                feedbackBox.className = "mt-4 p-3.5 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-between bg-rose-100 text-rose-800 border border-rose-300 block";
+                feedbackText.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1 text-rose-600"></i> Kurang Tepat. Jawaban benar: ${qData.options[qData.ans]}`;
+            }
+
+            document.getElementById('live-score').innerText = userScore;
+            updateUserScoreDisplay();
+        }
+
+        // Interactive Tap-to-Match Game Setup
+        function setupMatchGame(pairs) {
+            selectedMatchLeft = null;
+            completedMatchesCount = 0;
+
+            const colLeft = document.getElementById('match-col-left');
+            const colRight = document.getElementById('match-col-right');
+            colLeft.innerHTML = '';
+            colRight.innerHTML = '';
+
+            // Shuffle right items
+            const shuffledRight = [...pairs].sort(() => Math.random() - 0.5);
+
+            pairs.forEach((p, idx) => {
+                const btnL = document.createElement('button');
+                btnL.className = "w-full text-left p-3 rounded-xl border-2 border-slate-200 bg-slate-50 font-bold text-xs text-slate-800 touch-target flex items-center justify-between transition";
+                btnL.innerHTML = `<span>${p.left}</span> <i class="fa-solid fa-hand-pointer text-slate-300"></i>`;
+                btnL.dataset.leftIdx = idx;
+                btnL.onclick = () => selectMatchLeft(btnL, idx);
+                colLeft.appendChild(btnL);
+            });
+
+            shuffledRight.forEach((p) => {
+                const origIdx = pairs.findIndex(item => item.right === p.right);
+                const btnR = document.createElement('button');
+                btnR.className = "w-full text-left p-3 rounded-xl border-2 border-slate-200 bg-slate-50 font-bold text-xs text-slate-800 touch-target flex items-center justify-between transition";
+                btnR.innerHTML = `<span>${p.right}</span> <i class="fa-regular fa-square text-slate-300"></i>`;
+                btnR.dataset.rightIdx = origIdx;
+                btnR.onclick = () => selectMatchRight(btnR, origIdx, pairs.length);
+                colRight.appendChild(btnR);
+            });
+        }
+
+        function selectMatchLeft(btn, idx) {
+            document.querySelectorAll('#match-col-left button').forEach(b => {
+                if (!b.classList.contains('matched-btn')) b.className = "w-full text-left p-3 rounded-xl border-2 border-slate-200 bg-slate-50 font-bold text-xs text-slate-800 touch-target flex items-center justify-between transition";
+            });
+            btn.className = "w-full text-left p-3 rounded-xl border-2 border-amber-500 bg-amber-100 font-bold text-xs text-amber-900 touch-target flex items-center justify-between transition selected-btn";
+            selectedMatchLeft = { element: btn, index: idx };
+        }
+
+        function selectMatchRight(btnR, rightIdx, totalPairs) {
+            if (!selectedMatchLeft) return;
+
+            if (selectedMatchLeft.index === rightIdx) {
+                // Correct Match
+                selectedMatchLeft.element.className = "w-full text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-600 text-white font-bold text-xs touch-target flex items-center justify-between matched-btn";
+                btnR.className = "w-full text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-600 text-white font-bold text-xs touch-target flex items-center justify-between matched-btn";
+                selectedMatchLeft.element.querySelector('i').className = "fa-solid fa-check-circle text-white";
+                btnR.querySelector('i').className = "fa-solid fa-check-circle text-white";
+
+                userScore += 10;
+                completedMatchesCount++;
+                selectedMatchLeft = null;
+
+                if (completedMatchesCount === totalPairs) {
+                    levelCorrectCount++; // 1 perfect score set for match
+                    const feedbackBox = document.getElementById('game-feedback-box');
+                    feedbackBox.className = "mt-4 p-3.5 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-between bg-emerald-100 text-emerald-800 border border-emerald-300 block";
+                    document.getElementById('game-feedback-text').innerHTML = `<i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Semuanya Terpasang Sempurna! +50 Poin.`;
+                }
+            } else {
+                // Incorrect
+                btnR.classList.add('border-rose-500', 'bg-rose-100');
+                setTimeout(() => {
+                    btnR.classList.remove('border-rose-500', 'bg-rose-100');
+                }, 500);
+            }
+            document.getElementById('live-score').innerText = userScore;
+            updateUserScoreDisplay();
+        }
+
+        // Next Question or Finish Level with Strict 100% Evaluation
+        function nextQuestion() {
+            const levelData = gameLevelsData[currentLevel];
+            currentQIndex++;
+
+            if (currentQIndex < levelData.length) {
+                loadQuestion();
+            } else {
+                // Evaluate if Level Completed 100% Correct
+                evaluateLevelCompletion();
+            }
+        }
+
+        // Evaluate level result (100% required)
+        function evaluateLevelCompletion() {
+            const levelData = gameLevelsData[currentLevel];
+            const isMatchLevel = (currentLevel === 2 || currentLevel === 4);
+            const isPerfect = isMatchLevel ? (completedMatchesCount === 5) : (levelCorrectCount === levelData.length);
+
+            const modal = document.getElementById('eval-modal');
+            const titleEl = document.getElementById('eval-title');
+            const msgEl = document.getElementById('eval-msg');
+            const iconEl = document.getElementById('eval-icon');
+            const btnsEl = document.getElementById('eval-btns');
+
+            modal.classList.remove('hidden');
+
+            if (isPerfect) {
+                // Passed Level 100%
+                iconEl.innerText = "🎉";
+                titleEl.innerText = `LEVEL ${currentLevel} LULUS 100%!`;
+                titleEl.className = "text-xl font-extrabold font-comic text-emerald-600";
+                msgEl.innerText = `Luar biasa, Detektif! Kamu berhasil menjawab SEMUA ${levelData.length} soal dengan sempurna. Lencana kehormatan berhasil didapatkan!`;
+
+                // Unlock next level if applicable
+                if (currentLevel === unlockedLevel && unlockedLevel < 6) {
+                    unlockedLevel++;
+                    localStorage.setItem('detektif_unlocked_level', unlockedLevel.toString());
+                }
+
+                unlockBadge(currentLevel);
+
+                btnsEl.innerHTML = `
+                    ${currentLevel < 6 ? `
+                        <button onclick="closeEvalModal(); startLevel(${currentLevel + 1});" class="bg-yellow-400 hover:bg-yellow-300 text-emerald-950 font-extrabold px-4 py-2.5 rounded-xl text-xs transition shadow flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> Lanjut ke Level ${currentLevel + 1}
+                        </button>
+                    ` : `
+                        <div class="text-xs text-amber-600 font-bold bg-amber-50 p-2 rounded-xl border border-amber-200"> Selamat! Kamu telah menamatkan seluruh 6 Level Detektif Majas!</div>
+                    `}
+                    <button onclick="closeEvalModal(); showScreen('dashboard');" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-trophy"></i> Lihat Dashboard & Simpan Skor
+                    </button>
+                `;
+            } else {
+                // Failed Level (< 100%)
+                iconEl.innerText = "❌";
+                titleEl.innerText = `BELUM 100% BENAR!`;
+                titleEl.className = "text-xl font-extrabold font-comic text-rose-600";
+                msgEl.innerHTML = `Kamu hanya menjawab benar <strong>${isMatchLevel ? completedMatchesCount : levelCorrectCount} dari ${levelData.length}</strong> soal.<br><span class="text-rose-600 font-semibold">Aturan Detektif: Kamu harus menjawab 100% BENAR untuk membuka level berikutnya!</span>`;
+
+                btnsEl.innerHTML = `
+                    <button onclick="closeEvalModal(); startLevel(${currentLevel});" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Coba Lagi Level ${currentLevel}
+                    </button>
+                    <button onclick="closeEvalModal(); showScreen('levels');" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs transition">
+                        Kembali ke Pilih Level
+                    </button>
+                `;
+            }
+        }
+
+        function closeEvalModal() {
+            document.getElementById('eval-modal').classList.add('hidden');
+        }
+
+        // Unlock Badge
+        function unlockBadge(lvl) {
+            const unlockedBadges = JSON.parse(localStorage.getItem('detektif_unlocked_badges') || '[]');
+            if (!unlockedBadges.includes(lvl)) {
+                unlockedBadges.push(lvl);
+                localStorage.setItem('detektif_unlocked_badges', JSON.stringify(unlockedBadges));
+            }
+            checkBadgesState();
+        }
+
+        function checkBadgesState() {
+            const unlockedBadges = JSON.parse(localStorage.getItem('detektif_unlocked_badges') || '[]');
+            for (let i = 1; i <= 6; i++) {
+                const badgeEl = document.getElementById(`badge-${i}`);
+                if (badgeEl) {
+                    if (unlockedBadges.includes(i)) {
+                        badgeEl.classList.remove('badge-locked');
+                        badgeEl.classList.add('bg-amber-100', 'border-amber-300', 'shadow');
+                    } else {
+                        badgeEl.classList.add('badge-locked');
+                    }
+                }
+            }
+        }
+
+        // Update Score Display & Storage
+        function updateUserScoreDisplay() {
+            const el = document.getElementById('total-user-score');
+            if (el) el.innerText = userScore;
+        }
+
+        // Save Score to LocalStorage & Google Sheets
+        async function savePlayerScore() {
+            const nameInput = document.getElementById('player-name-input');
+            const msg = document.getElementById('save-status-msg');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                msg.className = "text-[11px] font-semibold text-rose-600 block";
+                msg.innerText = "Isi nama kamu terlebih dahulu!";
+                return;
+            }
+
+            const scores = JSON.parse(localStorage.getItem('detektif_majas_scores') || '[]');
+            const newRecord = {
+                name: name,
+                score: userScore,
+                level: `Level ${unlockedLevel}`,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                timestamp: new Date().toISOString()
+            };
+            scores.push(newRecord);
+            localStorage.setItem('detektif_majas_scores', JSON.stringify(scores));
+
+            // Google Sheets Integration POST Request if URL exists
+            if (googleSheetUrl) {
+                try {
+                    fetch(googleSheetUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newRecord)
+                    });
+                } catch (e) {
+                    console.log("Sheet webhook error:", e);
+                }
+            }
+
+            msg.className = "text-[11px] font-semibold text-emerald-600 block";
+            msg.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Skor berhasil disimpan ke papan rekor & terkirim ke Spreadsheet!';
+            renderLeaderboard();
+        }
+
+        // Render Leaderboard
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-tbody');
+            if (!tbody) return;
+
+            const scores = JSON.parse(localStorage.getItem('detektif_majas_scores') || '[{"name":"Detektif Nala","score":120,"date":"Hari ini"},{"name":"Budi Kelas 5A","score":100,"date":"Kemarin"}]');
+            scores.sort((a, b) => b.score - a.score);
+
+            tbody.innerHTML = '';
+            scores.slice(0, 10).forEach((item, idx) => {
+                let medal = `${idx + 1}`;
+                if (idx === 0) medal = '🥇';
+                else if (idx === 1) medal = '🥈';
+                else if (idx === 2) medal = '🥉';
+
+                const tr = document.createElement('tr');
+                tr.className = idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-center font-bold">${medal}</td>
+                    <td class="py-2.5 px-3 font-bold text-slate-800">${item.name}</td>
+                    <td class="py-2.5 px-3 text-center font-extrabold text-emerald-600">${item.score}</td>
+                    <td class="py-2.5 px-3 text-right text-slate-400">${item.date}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Admin Panel Controls
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('admin-auth-box').classList.remove('hidden');
+            document.getElementById('admin-content-box').classList.add('hidden');
+            document.getElementById('gsheet-url-input').value = googleSheetUrl;
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function verifyAdminLogin() {
+            const user = document.getElementById('admin-user-input').value.trim();
+            const pass = document.getElementById('admin-pass-input').value.trim();
+            const err = document.getElementById('admin-auth-error');
+
+            if (user === 'majas' && pass === 'detective') {
+                err.classList.add('hidden');
+                document.getElementById('admin-auth-box').classList.add('hidden');
+                document.getElementById('admin-content-box').classList.remove('hidden');
+            } else {
+                err.classList.remove('hidden');
+            }
+        }
+
+        function saveGSheetUrl() {
+            const url = document.getElementById('gsheet-url-input').value.trim();
+            googleSheetUrl = url;
+            localStorage.setItem('detektif_gsheet_url', url);
+            alert("URL Webhook Google Sheets berhasil disimpan!");
+        }
+
+        function resetLevelProgress() {
+            if (confirm("Reset progres level terbuka kembali ke Level 1?")) {
+                unlockedLevel = 1;
+                localStorage.setItem('detektif_unlocked_level', '1');
+                localStorage.removeItem('detektif_unlocked_badges');
+                renderLevelCards();
+                checkBadgesState();
+                alert("Progres level berhasil di-reset!");
+            }
+        }
+    </script>
+</body>
+</html>
